@@ -30,6 +30,11 @@ android {
     kotlinOptions {
         freeCompilerArgs += ['-Xexplicit-api=strict', '-Xopt-in=kotlin.RequiresOptIn']
     }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/DEPENDENCIES']
+        }
+    }
 }
 
 dependencies {
