@@ -38,7 +38,7 @@ internal fun WindowManager.getScreenSize(): Pair<Int, Int> {
     }
 }
 
-internal val View.locationOnScreen: IntArray get() = intArrayOf(0,0).also(::getLocationOnScreen)
+internal val View.locationOnScreen: IntArray get() = intArrayOf(0, 0).also(::getLocationOnScreen)
 
 internal val View.topCoord: Int get() = locationOnScreen[1] - translationY.toInt()
 
@@ -49,11 +49,11 @@ internal fun View.addOnPreDrawListener(listener: OnPreDrawListener) {
         viewTreeObserver.addOnPreDrawListener(listener)
 
     addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
-        override fun onViewAttachedToWindow(v: View?) {
+        override fun onViewAttachedToWindow(v: View) {
             viewTreeObserver.addOnPreDrawListener(listener)
         }
 
-        override fun onViewDetachedFromWindow(v: View?) {
+        override fun onViewDetachedFromWindow(v: View) {
             viewTreeObserver.removeOnPreDrawListener(listener)
         }
     })
@@ -93,7 +93,8 @@ internal fun AdaptyPaywallProduct.hasFreeTrial(): Boolean =
 
 internal fun AdaptyPaywallProduct.firstDiscountOfferOrNull(): AdaptyProductDiscountPhase? {
     return subscriptionDetails?.let { subDetails ->
-        subDetails.introductoryOfferPhases.firstOrNull()?.takeIf { subDetails.introductoryOfferEligibility == ELIGIBLE }
+        subDetails.introductoryOfferPhases.firstOrNull()
+            ?.takeIf { subDetails.introductoryOfferEligibility == ELIGIBLE }
     }
 }
 

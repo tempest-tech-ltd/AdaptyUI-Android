@@ -34,7 +34,7 @@ internal class ShapeDrawable(
             }
         }
 
-    override fun onBoundsChange(bounds: Rect?) {
+    override fun onBoundsChange(bounds: Rect) {
         super.onBoundsChange(bounds)
         fillPath.rewind()
         fillPaint.shader = null
@@ -56,7 +56,12 @@ internal class ShapeDrawable(
         if (strokeShape != null) {
             if (strokePath.isEmpty) {
                 val halfStrokeWidth = (strokeShape.strokeThicknessPx / 2).toInt()
-                val bounds = Rect(bounds.left + halfStrokeWidth, bounds.top + halfStrokeWidth, bounds.right - halfStrokeWidth, bounds.bottom - halfStrokeWidth)
+                val bounds = Rect(
+                    bounds.left + halfStrokeWidth,
+                    bounds.top + halfStrokeWidth,
+                    bounds.right - halfStrokeWidth,
+                    bounds.bottom - halfStrokeWidth
+                )
                 fillPath(strokePath, bounds, strokeShape)
             }
             if (strokePaint.shader == null) {
@@ -71,6 +76,7 @@ internal class ShapeDrawable(
             is AdaptyViewConfiguration.Asset.Gradient -> {
                 paint.shader = shaderHelper.createShader(bounds, asset)
             }
+
             is AdaptyViewConfiguration.Asset.Image -> {
                 val reqDimValue: Int
                 val dim: AdaptyViewConfiguration.Asset.Image.Dimension
@@ -87,6 +93,7 @@ internal class ShapeDrawable(
                     paint.shader = shaderHelper.createShader(bounds, bitmap)
                 }
             }
+
             else -> Unit
         }
     }
@@ -107,7 +114,11 @@ internal class ShapeDrawable(
         }
     }
 
-    private fun fillPathAsRectWithArc(path: Path, bounds: Rect, rectWithArc: Shape.Type.RectWithArc) {
+    private fun fillPathAsRectWithArc(
+        path: Path,
+        bounds: Rect,
+        rectWithArc: Shape.Type.RectWithArc
+    ) {
         val arcHeight = rectWithArc.arcHeightPx
         val rect = RectF()
         path.moveTo(bounds.left.toFloat(), bounds.bottom.toFloat())
@@ -135,7 +146,12 @@ internal class ShapeDrawable(
     }
 
     private fun fillPathAsCircle(path: Path, bounds: Rect) {
-        path.addCircle(bounds.exactCenterX(), bounds.exactCenterY(),  min(bounds.width().toFloat(), bounds.height().toFloat()) / 2, Path.Direction.CW)
+        path.addCircle(
+            bounds.exactCenterX(),
+            bounds.exactCenterY(),
+            min(bounds.width().toFloat(), bounds.height().toFloat()) / 2,
+            Path.Direction.CW
+        )
     }
 
     private fun fillPathAsRect(path: Path, bounds: Rect, type: Shape.Type.Rect) {
@@ -143,6 +159,7 @@ internal class ShapeDrawable(
             type.cornerRadiiPx == null || type.cornerRadiiPx.all { it == 0f } -> {
                 path.addRect(RectF(bounds), Path.Direction.CW)
             }
+
             else -> {
                 path.addRoundRect(RectF(bounds), type.cornerRadiiPx, Path.Direction.CW)
             }
@@ -171,9 +188,9 @@ internal class ShapeDrawable(
         ) : Shape(type, asset)
 
         sealed class Type {
-            class Rect(val cornerRadiiPx: FloatArray? = null): Type()
-            object Circle: Type()
-            class RectWithArc(val arcHeightPx: Float): Type()
+            class Rect(val cornerRadiiPx: FloatArray? = null) : Type()
+            object Circle : Type()
+            class RectWithArc(val arcHeightPx: Float) : Type()
         }
     }
 }
