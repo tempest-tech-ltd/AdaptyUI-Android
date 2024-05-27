@@ -35,6 +35,9 @@ android {
             excludes += ['META-INF/DEPENDENCIES']
         }
     }
+    buildFeatures {
+        buildConfig true
+    }
 }
 
 dependencies {
